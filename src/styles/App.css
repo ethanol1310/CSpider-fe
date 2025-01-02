@@ -24,10 +24,8 @@
     gap: 16px;
 }
 
-.filters {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
+.source-controls {
+    margin-top: 10px;
 }
 
 .date-controls {
