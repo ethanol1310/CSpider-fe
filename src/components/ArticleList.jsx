@@ -13,7 +13,7 @@ const ArticleList = ({ articles, loading }) => {
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={record.url} target="_blank" rel="noopener noreferrer">
+                <a href={record?.url} target="_blank" rel="noopener noreferrer">
                     {text}
                 </a>
             ),
@@ -23,12 +23,12 @@ const ArticleList = ({ articles, loading }) => {
             dataIndex: 'total_comment_likes',
             key: 'total_comment_likes',
             width: 160,
-            sorter: (a, b) => a.total_comment_likes - b.total_comment_likes,
+            sorter: (a, b) => a?.total_comment_likes - b?.total_comment_likes,
             render: (likes) => (
-                <span className={likes > 1000 ? 'hot-article-likes' : ''}>
-          <LikeOutlined style={{ marginRight: 8 }} />
+                <span>
+                    <LikeOutlined style={{ marginRight: 8 }} />
                     {likes.toLocaleString()}
-        </span>
+                </span>
             ),
         },
         {
@@ -36,7 +36,7 @@ const ArticleList = ({ articles, loading }) => {
             dataIndex: 'publish_time',
             key: 'publish_time',
             width: 200,
-            sorter: (a, b) => new Date(a.publish_time) - new Date(b.publish_time),
+            sorter: (a, b) => new Date(a?.publish_time) - new Date(b?.publish_time),
             render: (date) => (
                 <Tooltip title={dayjs(date).format('YYYY-MM-DD HH:mm:ss')}>
                     {dayjs(date).fromNow()}
@@ -51,14 +51,7 @@ const ArticleList = ({ articles, loading }) => {
             columns={columns}
             loading={loading}
             rowKey="url"
-            pagination={{
-                defaultPageSize: 10,
-                showSizeChanger: true,
-                pageSizeOptions: ['10', '20', '50'],
-            }}
-            rowClassName={(record) =>
-                record.total_comment_likes > 1000 ? 'hot-article-row' : ''
-            }
+            pagination={false}
             scroll={{ x: 800 }}
         />
     );

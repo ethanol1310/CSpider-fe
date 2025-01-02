@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Typography, message, Space, Card, Statistic } from 'antd';
+import React, { useState, useCallback } from 'react';
+import { Layout, Typography, Button, message } from 'antd';
 import DateRangePicker from './components/DateRangePicker';
 import SourceSelector from './components/SourceSelector';
 import ArticleList from './components/ArticleList';
@@ -15,69 +15,63 @@ function App() {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedSource, setSelectedSource] = useState(Source.VnExpress);
-    const [stats, setStats] = useState({ total: 0, hot: 0 });
+    const [stats, setStats] = useState({ total: 0 });
+    const [dates, setDates] = useState([
+        dayjs().subtract(7, 'day'),
+        dayjs()
+    ]);
 
-    // Handler for date range changes
-    const handleDateRangeChange = async (fromDate, toDate) => {
-        await loadArticles(fromDate, toDate, selectedSource);
+    const handleDateRangeChange = (fromDate, toDate) => {
+        setDates([fromDate, toDate]);
     };
 
-    // Handler for source changes
-    const handleSourceChange = async (source) => {
+    const handleSourceChange = (source) => {
         setSelectedSource(source);
-        const fromDate = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
-        const toDate = dayjs().format('YYYY-MM-DD');
-        await loadArticles(fromDate, toDate, source);
     };
 
-    // Load articles function
-    const loadArticles = async (fromDate, toDate, source) => {
+    const loadArticles = useCallback(async () => {
         try {
             setLoading(true);
-            const data = await fetchArticles(fromDate, toDate, source);
-            setArticles(data.articles);
-
-            // Calculate statistics
-            const hotArticles = data.articles.filter(article => article.total_comment_likes > 1000);
+            const [fromDate, toDate] = dates;
+            const diffInDays = toDate.diff(fromDate, 'day');
+            if (diffInDays > 10) {
+                message.warning('Maximum day range is 10. Please try again.');
+                return;
+            }
+            const data = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedSource);
+            setArticles(data?.articles);
             setStats({
-                total: data.articles.length,
-                hot: hotArticles.length
+                total: data?.articles?.length ?? 0,
             });
         } catch (error) {
-            message.error('Failed to fetch articles');
+            message.error('Failed to fetch articles.');
         } finally {
             setLoading(false);
         }
-    };
-
-    // Initial load
-    useEffect(() => {
-        const fromDate = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
-        const toDate = dayjs().format('YYYY-MM-DD');
-        loadArticles(fromDate, toDate, selectedSource);
-    }, []); // Empty dependency array for initial load only
+    }, [dates, selectedSource]);
 
     return (
         <Layout className="app-container">
             <Header className="app-header">
                 <Title level={3}>CSpider</Title>
                 <div className="controls-container">
-                    <div className="filters">
-                        <div className="date-controls">
-                            <DateRangePicker onDateRangeChange={handleDateRangeChange} />
+                    <div>
+                        Filters:
+                        <div className="filters">
+                            <div className="date-controls">
+                                <DateRangePicker dates={dates} onDateRangeChange={handleDateRangeChange} />
+                            </div>
+                            <div className="source-controls">
+                                <SourceSelector value={selectedSource} onChange={handleSourceChange} />
+                            </div>
                         </div>
-                        <div className="source-controls">
-                            <SourceSelector value={selectedSource} onChange={handleSourceChange} />
-                        </div>
+                        <Button className="search-button" color="danger" variant="solid" onClick={loadArticles} disabled={loading}>
+                            Run
+                        </Button>
                     </div>
+
                     <div className="stats">
                         <StatsCard title="Total Articles" value={stats.total} />
-                        <StatsCard
-                            title="Hot Articles"
-                            value={stats.hot}
-                            percentage={stats.total > 0 ? ((stats.hot / stats.total) * 100).toFixed(1) : 0}
-                            isHot={true}
-                        />
                     </div>
                 </div>
             </Header>

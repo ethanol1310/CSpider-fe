@@ -18,12 +18,3 @@
     align-items: baseline;
     gap: 4px;
 }
-
-.stats-value.hot {
-    color: #cf1322;
-}
-
-.percentage {
-    font-size: 16px;
-    color: #8c8c8c;
-}

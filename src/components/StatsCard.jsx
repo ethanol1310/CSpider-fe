@@ -1,13 +1,12 @@
 import 'react';
 import '../styles/StatsCard.css';
 
-const StatsCard = ({ title, value, percentage, isHot }) => {
+const StatsCard = ({ title, value }) => {
     return (
         <div className="stats-card">
             <div className="stats-title">{title}</div>
-            <div className={`stats-value ${isHot ? 'hot' : ''}`}>
+            <div className="stats-value">
                 {value}
-                {percentage && <span className="percentage">({percentage}%)</span>}
             </div>
         </div>
     );
