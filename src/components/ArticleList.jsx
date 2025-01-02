@@ -19,10 +19,10 @@ const ArticleList = ({ articles, loading }) => {
             ),
         },
         {
-            title: 'Likes',
+            title: 'Comment Likes',
             dataIndex: 'total_comment_likes',
             key: 'total_comment_likes',
-            width: 150,
+            width: 160,
             sorter: (a, b) => a.total_comment_likes - b.total_comment_likes,
             render: (likes) => (
                 <span className={likes > 1000 ? 'hot-article-likes' : ''}>
@@ -55,7 +55,6 @@ const ArticleList = ({ articles, loading }) => {
                 defaultPageSize: 10,
                 showSizeChanger: true,
                 pageSizeOptions: ['10', '20', '50'],
-                showTotal: (total) => `Total ${total} articles`,
             }}
             rowClassName={(record) =>
                 record.total_comment_likes > 1000 ? 'hot-article-row' : ''
