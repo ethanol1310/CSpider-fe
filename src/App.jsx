@@ -38,13 +38,18 @@ function App() {
                 message.warning('Maximum day range is 10. Please try again.');
                 return;
             }
-            const data = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedSource);
-            setArticles(data?.articles);
-            setStats({
-                total: data?.articles?.length ?? 0,
-            });
+            const response = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedSource);
+            if (response.error_code === 'success' && response.data) {
+                setArticles(response.data.articles || []);
+                setStats({
+                    total: response.data.total || 0,
+                });
+            } else {
+                throw new Error(response.message || 'Failed to fetch articles');
+            }
         } catch (error) {
             message.error('Failed to fetch articles.');
+            console.error(error);
         } finally {
             setLoading(false);
         }
