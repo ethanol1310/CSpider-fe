@@ -1,0 +1,29 @@
+.stats-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+}
+
+.stats-title {
+    color: #8c8c8c;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.stats-value {
+    font-size: 24px;
+    font-weight: 500;
+    color: #1890ff;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.stats-value.hot {
+    color: #cf1322;
+}
+
+.percentage {
+    font-size: 16px;
+    color: #8c8c8c;
+}

@@ -1,0 +1,57 @@
+.app-container {
+    min-height: 100vh;
+}
+
+.app-header {
+    background: white !important;
+    padding: 16px 24px !important;
+    height: auto !important;
+    line-height: 1.5 !important;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h3 {
+    margin: 0 0 16px 0 !important;
+    font-size: 24px;
+}
+
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.filters {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.date-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stats {
+    display: flex;
+    gap: 24px;
+    margin-left: auto;
+}
+
+.app-content {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .controls-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
