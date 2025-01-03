@@ -1,6 +1,4 @@
-# React + Vite Project
-
-This project is a React application built with Vite. It includes a minimal setup to get React working with Vite, Hot Module Replacement (HMR), and some ESLint rules.
+# CSpider
 
 ## Prerequisites
 
@@ -46,7 +44,7 @@ To build and run the application using Docker:
 
 ## Environment Variables
 
-Create a `.env.production` file in the root of the project to configure environment variables:
+1. Create a `.env.production` file in the root of the project to configure environment variables:
 
 ```
 VITE_API_URL=abc.xyz
@@ -55,20 +53,20 @@ VITE_API_URL=abc.xyz
 ## Project Structure
 
 ```
-├── src
-│   ├── components
-│   │   ├── ArticleList.jsx
-│   │   ├── DateRangePicker.jsx
-│   ├── services
-│   │   └── api.js
-│   ├── App.jsx
-│   ├── main.jsx
-├── public
-│   └── index.html
-├── Dockerfile
-├── package.json
-├── vite.config.js
-├── README.md
+├── App.css
+├── App.jsx
+├── components
+│   ├── ArticleList.jsx
+│   ├── DateRangePicker.jsx
+│   ├── OptionSelector.jsx
+│   └── StatsCard.jsx
+├── index.css
+├── main.jsx
+├── services
+│   └── api.js
+└── styles
+    ├── App.css
+    └── StatsCard.css
 ```
 
 ## Available Scripts
