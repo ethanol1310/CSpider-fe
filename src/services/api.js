@@ -7,13 +7,14 @@ export const Source = {
     TuoiTre: 1
 };
 
-export const fetchArticles = async (fromDate, toDate, source) => {
+export const fetchArticles = async (fromDate, toDate, limit, source) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/articles`, {
             params: {
                 from_date: fromDate,
                 to_date: toDate,
-                source: source
+                source: source,
+                limit: limit
             }
         });
         return response.data;

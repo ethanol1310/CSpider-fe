@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Layout, Typography, Button, message } from 'antd';
 import DateRangePicker from './components/DateRangePicker';
-import SourceSelector from './components/SourceSelector';
+import OptionSelector from './components/OptionSelector.jsx';
 import ArticleList from './components/ArticleList';
 import StatsCard from './components/StatsCard';
 import { fetchArticles, Source } from './services/api';
@@ -15,6 +15,7 @@ function App() {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedSource, setSelectedSource] = useState(Source.VnExpress);
+    const [selectedLimit, setSelectedLimit] = useState(10);
     const [stats, setStats] = useState({ total: 0 });
     const [dates, setDates] = useState([
         dayjs().subtract(7, 'day'),
@@ -23,6 +24,10 @@ function App() {
 
     const handleDateRangeChange = (fromDate, toDate) => {
         setDates([fromDate, toDate]);
+    };
+
+    const handleLimitChange = (newCount) => {
+        setSelectedLimit(newCount);
     };
 
     const handleSourceChange = (source) => {
@@ -38,7 +43,7 @@ function App() {
                 message.warning('Maximum day range is 10. Please try again.');
                 return;
             }
-            const response = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedSource);
+            const response = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedLimit, selectedSource);
             if (response.error_code === 'success' && response.data) {
                 setArticles(response.data.articles || []);
                 setStats({
@@ -53,7 +58,7 @@ function App() {
         } finally {
             setLoading(false);
         }
-    }, [dates, selectedSource]);
+    }, [dates, selectedLimit, selectedSource]);
 
     return (
         <Layout className="app-container">
@@ -61,27 +66,46 @@ function App() {
                 <Title level={3}>CSpider</Title>
                 <div className="controls-container">
                     <div>
-                        Filters:
                         <div className="filters">
                             <div className="date-controls">
-                                <DateRangePicker dates={dates} onDateRangeChange={handleDateRangeChange} />
+                                <DateRangePicker dates={dates} onDateRangeChange={handleDateRangeChange}/>
+                            </div>
+                            <div className="limit-controls">
+                                <OptionSelector
+                                    options={[
+                                        {val: 10, label: '10'},
+                                        {val: 30, label: '30'},
+                                        {val: 50, label: '50'},
+                                    ]}
+                                    value={selectedLimit}
+                                    onChange={handleLimitChange}
+                                />
                             </div>
                             <div className="source-controls">
-                                <SourceSelector value={selectedSource} onChange={handleSourceChange} />
+                                <OptionSelector
+                                    options={[
+                                        { val: Source.VnExpress, label: 'VnExpress' },
+                                        { val: Source.TuoiTre, label: 'TuoiTre' }
+                                    ]}
+                                    value={selectedSource}
+                                    onChange={handleSourceChange}/>
+                            </div>
+                            <div>
+                                <Button className="search-button" color="danger" variant="solid" onClick={loadArticles}
+                                        disabled={loading}>
+                                    Run
+                                </Button>
                             </div>
                         </div>
-                        <Button className="search-button" color="danger" variant="solid" onClick={loadArticles} disabled={loading}>
-                            Run
-                        </Button>
                     </div>
 
                     <div className="stats">
-                        <StatsCard title="Total Articles" value={stats.total} />
+                        <StatsCard title="Total Articles" value={stats.total}/>
                     </div>
                 </div>
             </Header>
             <Content className="app-content">
-                <ArticleList articles={articles} loading={loading} />
+                <ArticleList articles={articles} loading={loading}/>
             </Content>
         </Layout>
     );

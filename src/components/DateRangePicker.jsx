@@ -28,7 +28,7 @@ const DateRangePicker = ({ dates = [defaultFromDate, defaultToDate], onDateRange
                 onChange={handleChange}
                 allowClear={false}
                 format="YYYY-MM-DD"
-                style={{ width: '300px' }}
+                style={{ width: '250px' }}
                 disabledDate={disabledDate}
             />
         </Space>
