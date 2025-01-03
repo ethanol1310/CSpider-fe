@@ -18,7 +18,7 @@ const DateRangePicker = ({ dates = [defaultFromDate, defaultToDate], onDateRange
     };
 
     const disabledDate = (current) => {
-        return current && current > dayjs().endOf('day');
+        return current && current > dayjs().endOf('day') || current < dayjs('2024-12-27');
     };
 
     return (

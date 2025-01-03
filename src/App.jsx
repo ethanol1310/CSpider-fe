@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Layout, Typography, Button, message } from 'antd';
 import DateRangePicker from './components/DateRangePicker';
 import OptionSelector from './components/OptionSelector.jsx';
@@ -38,11 +38,7 @@ function App() {
         try {
             setLoading(true);
             const [fromDate, toDate] = dates;
-            const diffInDays = toDate.diff(fromDate, 'day');
-            if (diffInDays > 10) {
-                message.warning('Maximum day range is 10. Please try again.');
-                return;
-            }
+     
             const response = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedLimit, selectedSource);
             if (response.error_code === 'success' && response.data) {
                 setArticles(response.data.articles || []);
@@ -59,6 +55,10 @@ function App() {
             setLoading(false);
         }
     }, [dates, selectedLimit, selectedSource]);
+
+    useEffect(() => {
+        loadArticles();
+    }, [])
 
     return (
         <Layout className="app-container">
