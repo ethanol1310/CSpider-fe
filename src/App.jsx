@@ -41,9 +41,9 @@ function App() {
      
             const response = await fetchArticles(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'), selectedLimit, selectedSource);
             if (response.error_code === 'success' && response.data) {
-                setArticles(response.data.articles || []);
+                setArticles(response?.data?.articles || []);
                 setStats({
-                    total: response.data.total || 0,
+                    total: response?.data?.total || 0,
                 });
             } else {
                 throw new Error(response.message || 'Failed to fetch articles');
